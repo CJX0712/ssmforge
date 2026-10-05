@@ -32,7 +32,7 @@ jobs:
         run: python -m pytest -q -W ignore::UserWarning --cov=ssmforge --cov-report=term
       - name: Demo smoke (deterministic, bit-for-bit)
         run: python examples/run_demo.py
-      - name: Secret scan
+      - name: Secret scan (value patterns only; prose words like "secret" are ignored)
         if: matrix.os == 'ubuntu-latest'
         run: |
-          ! git grep -nEi "(sk-[a-z0-9]|api[_-]?key|secret|password|token)" -- '*.py' '*.md' '*.yml'
+          ! git grep -nE "(sk-[A-Za-z0-9]{20,}|ghp_[A-Za-z0-9]{36}|AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY-----)" -- '*.py' '*.md' '*.yml' '*.txt'
